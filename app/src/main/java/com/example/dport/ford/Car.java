@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by dport on 1/15/2016.
+ * Derek is amazing
  */
 public class Car implements Serializable{
     protected String model;
