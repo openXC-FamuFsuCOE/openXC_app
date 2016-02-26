@@ -39,7 +39,7 @@ public class CustomBaseAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.car_list_row, null);
             holder = new ViewHolder();
             holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
-            holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
+            holder.txtTitle = (TextView) convertView.findViewById(R.id.car_row_name);
             holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
             convertView.setTag(holder);
         }

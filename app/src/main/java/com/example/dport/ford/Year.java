@@ -1,9 +1,11 @@
 package com.example.dport.ford;
 
+import java.io.Serializable;
+
 /**
  * Created by dport on 1/24/2016.
  */
-public class Year {
+public class Year implements Serializable{
     private Integer year;
 
     public Integer getYear() {

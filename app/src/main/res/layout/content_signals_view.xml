@@ -12,4 +12,11 @@
     tools:context=".Signals_view"
     tools:showIn="@layout/activity_signals_view">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vehicle_speed"/>
+
+
 </RelativeLayout>

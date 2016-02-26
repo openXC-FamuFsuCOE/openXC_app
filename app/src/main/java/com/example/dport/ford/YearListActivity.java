@@ -1,5 +1,6 @@
 package com.example.dport.ford;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -210,7 +211,16 @@ public class YearListActivity extends AppCompatActivity {
                 break;
             default: Log.d("YearListActivity","i don't think it worked");
         }
+   listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Year year = mYear.get(position);
+            Intent i = new Intent(YearListActivity.this, Signals_view.class);
+            i.putExtra(YearListActivity.EXTRA, year);
+            startActivity(i);
+        }
 
+    });
 
 
     }
