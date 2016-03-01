@@ -1,30 +1,26 @@
 package com.example.dport.ford;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.widget.TextView;
 
+import com.openxcplatform.openxcstarter.R;
 import com.openxc.VehicleManager;
+import com.openxc.measurements.Measurement;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.FuelConsumed;
 import com.openxc.measurements.FuelLevel;
-import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.VehicleSpeed;
 
-public class Signals_view extends AppCompatActivity {
-
+public class StarterActivity extends Activity {
     private static final String TAG = "StarterActivity";
 
     private VehicleManager mVehicleManager;
@@ -37,7 +33,7 @@ public class Signals_view extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_signals_view);
+        setContentView(R.layout.activity_starter);
         // grab a reference to the engine speed text object in the UI, so we can
         // manipulate its value later from Java code
         mEngineSpeedView = (TextView) findViewById(com.example.dport.ford.R.id.engine_speed);
@@ -45,6 +41,7 @@ public class Signals_view extends AppCompatActivity {
         mFuelLevelView = (TextView) findViewById(com.example.dport.ford.R.id.fuel_level);
         mOdometerView = (TextView) findViewById(com.example.dport.ford.R.id.odometer);
         mVehicleSpeedView = (TextView) findViewById(com.example.dport.ford.R.id.vehicle_speed);
+
     }
 
     @Override
@@ -83,7 +80,6 @@ public class Signals_view extends AppCompatActivity {
         }
     }
 
-
     /* This is an OpenXC measurement listener object - the type is recognized
      * by the VehicleManager as something that can receive measurement updates.
      * Later in the file, we'll ask the VehicleManager to call the receive()
@@ -99,7 +95,7 @@ public class Signals_view extends AppCompatActivity {
             // In order to modify the UI, we have to make sure the code is
             // running on the "UI thread" - Google around for this, it's an
             // important concept in Android.
-            Signals_view.this.runOnUiThread(new Runnable() {
+            StarterActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     // Finally, we've got a new value and we're running on the
                     // UI thread - we set the text of the EngineSpeed view to
@@ -121,7 +117,7 @@ public class Signals_view extends AppCompatActivity {
             // In order to modify the UI, we have to make sure the code is
             // running on the "UI thread" - Google around for this, it's an
             // important concept in Android.
-            Signals_view.this.runOnUiThread(new Runnable() {
+            StarterActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     // Finally, we've got a new value and we're running on the
                     // UI thread - we set the text of the EngineSpeed view to
@@ -143,7 +139,7 @@ public class Signals_view extends AppCompatActivity {
             // In order to modify the UI, we have to make sure the code is
             // running on the "UI thread" - Google around for this, it's an
             // important concept in Android.
-            Signals_view.this.runOnUiThread(new Runnable() {
+            StarterActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     // Finally, we've got a new value and we're running on the
                     // UI thread - we set the text of the EngineSpeed view to
@@ -165,7 +161,7 @@ public class Signals_view extends AppCompatActivity {
             // In order to modify the UI, we have to make sure the code is
             // running on the "UI thread" - Google around for this, it's an
             // important concept in Android.
-            Signals_view.this.runOnUiThread(new Runnable() {
+            StarterActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     // Finally, we've got a new value and we're running on the
                     // UI thread - we set the text of the EngineSpeed view to
@@ -187,7 +183,7 @@ public class Signals_view extends AppCompatActivity {
             // In order to modify the UI, we have to make sure the code is
             // running on the "UI thread" - Google around for this, it's an
             // important concept in Android.
-            Signals_view.this.runOnUiThread(new Runnable() {
+            StarterActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     // Finally, we've got a new value and we're running on the
                     // UI thread - we set the text of the EngineSpeed view to
@@ -216,10 +212,6 @@ public class Signals_view extends AppCompatActivity {
             // we request that the VehicleManager call its receive() method
             // whenever the EngineSpeed changes
             mVehicleManager.addListener(EngineSpeed.class, mSpeedListener);
-            mVehicleManager.addListener(FuelConsumed.class, mFuelConsumedListener);
-            mVehicleManager.addListener(FuelLevel.class, mFuelLevelListener);
-            mVehicleManager.addListener(Odometer.class, mOdometerListener);
-            mVehicleManager.addListener(VehicleSpeed.class, mVehicleSpeedListener);
         }
 
         // Called when the connection with the service disconnects unexpectedly
@@ -232,8 +224,7 @@ public class Signals_view extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.starter, menu);
         return true;
     }
-
 }
