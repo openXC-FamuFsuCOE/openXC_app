@@ -14,7 +14,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.view.LayoutInflater;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.openxc.VehicleManager;
 import com.openxc.measurements.EngineSpeed;
 import com.openxc.measurements.FuelConsumed;
@@ -22,6 +26,10 @@ import com.openxc.measurements.FuelLevel;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.Odometer;
 import com.openxc.measurements.VehicleSpeed;
+
+import java.util.Random;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class Signals_view extends AppCompatActivity {
 
@@ -33,11 +41,19 @@ public class Signals_view extends AppCompatActivity {
     private TextView mFuelLevelView;
     private TextView mOdometerView;
     private TextView mVehicleSpeedView;
+    private final android.os.Handler mHandler =  new android.os.Handler();
+    private Runnable mTimer1;
+    private Runnable mTimer2;
+    private LineGraphSeries<DataPoint> mSeries1;
+    private LineGraphSeries<DataPoint> mSeries2;
+    private double graph2LastXValue = 5d;
+    private double speed=0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_signals_view);
+
         // grab a reference to the engine speed text object in the UI, so we can
         // manipulate its value later from Java code
         mEngineSpeedView = (TextView) findViewById(com.example.dport.ford.R.id.engine_speed);
@@ -45,7 +61,36 @@ public class Signals_view extends AppCompatActivity {
         mFuelLevelView = (TextView) findViewById(com.example.dport.ford.R.id.fuel_level);
         mOdometerView = (TextView) findViewById(com.example.dport.ford.R.id.odometer);
         mVehicleSpeedView = (TextView) findViewById(com.example.dport.ford.R.id.vehicle_speed);
+
+
+
+
+        GraphView graph1 = (GraphView) findViewById(R.id.graph1);
+        GraphView graph2 = (GraphView) findViewById(R.id.graph2);
+        GraphView graph3 = (GraphView) findViewById(R.id.graph3);
+
+        mSeries1 = new LineGraphSeries<>();
+        mSeries2 = new LineGraphSeries<>();
+
+        graph2.getViewport().setXAxisBoundsManual(true);
+        graph2.getViewport().setMinX(0);
+        graph2.getViewport().setMaxX(100);
+
+        // LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+               /* new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)*/
+
+        // });
+        graph1.addSeries(mSeries1);
+        graph2.addSeries(mSeries2);
+
     }
+
+
+
 
     @Override
     public void onPause() {
@@ -69,12 +114,62 @@ public class Signals_view extends AppCompatActivity {
 
             unbindService(mConnection);
             mVehicleManager = null;
+
+            mHandler.removeCallbacks(mTimer1);
+            mHandler.removeCallbacks(mTimer2);
+
         }
     }
+
+
+    private DataPoint[] generateData() {
+        int count = 30;
+        DataPoint[] values = new DataPoint[count];
+        for (int i=0; i<count; i++) {
+            double f = mRand.nextDouble()*0.15+0.3;
+            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
+            DataPoint v = new DataPoint(i, y);
+            values[i] = v;
+        }
+        return values;
+    }
+
+    double mLastRandom = 2;
+    Random mRand = new Random();
+    private double getRandom() {
+        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
+    }
+
+
+
+
+
+
 
     @Override
     public void onResume() {
         super.onResume();
+
+        mTimer1 = new Runnable() {
+            @Override
+            public void run() {
+                mSeries1.resetData(generateData());
+                mHandler.postDelayed(this, 300);
+            }
+        };
+        mHandler.postDelayed(mTimer1,300);
+
+        mTimer2 = new Runnable() {
+            @Override
+            public void run() {
+                graph2LastXValue += 1d;
+                mSeries2.appendData(new DataPoint(graph2LastXValue, speed), true, 40);
+                mHandler.postDelayed(this, 200);
+            }
+        };
+        mHandler.postDelayed(mTimer2, 1000);
+
+
         // When the activity starts up or returns from the background,
         // re-connect to the VehicleManager so we can receive updates.
         if(mVehicleManager == null) {
@@ -194,6 +289,7 @@ public class Signals_view extends AppCompatActivity {
                     // the latest value
                     mVehicleSpeedView.setText("Vehicle Speed: "
                             + carSpeed.getValue().doubleValue());
+                    speed = carSpeed.getValue().doubleValue();
                 }
             });
         }

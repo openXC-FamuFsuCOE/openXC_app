@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-import com.openxcplatform.openxcstarter.R;
+//import com.openxcplatform.openxcstarter.R;
 import com.openxc.VehicleManager;
 import com.openxc.measurements.Measurement;
 import com.openxc.measurements.EngineSpeed;
@@ -33,7 +33,7 @@ public class StarterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_starter);
+        setContentView(R.layout.content_signals_view);
         // grab a reference to the engine speed text object in the UI, so we can
         // manipulate its value later from Java code
         mEngineSpeedView = (TextView) findViewById(com.example.dport.ford.R.id.engine_speed);
@@ -224,7 +224,7 @@ public class StarterActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.starter, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 }
